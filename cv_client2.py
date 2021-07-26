@@ -5,9 +5,9 @@ import numpy as np
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('127.0.0.1', 8485))       
 
-cam = cv2.VideoCapture(0)
-cam.set(3, 320)
-cam.set(4, 240)
+cam = cv2.VideoCapture('1215.mp4')
+#cam.set(3, 320)
+#cam.set(4, 240)
 
 while True:
     ret, frame = cam.read()
