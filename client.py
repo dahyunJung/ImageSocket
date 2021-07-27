@@ -12,13 +12,10 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
 
 while True:
     ret, frame = cam.read()
-    result, frame = cv2.imencode('.jpg', frame, encode_param) 
-    data = np.array(frame)  # type=numpy.ndarray print([[255][219][213]], ...)
-    stringData = data.tobytes()     # type=bytes
+    result, frame = cv2.imencode('.jpg', frame, encode_param)
+    stringData = frame.tobytes()     # type=bytes
 
-    #서버에 데이터 전송(str(len(stringData))).encode().ljust(16)
     s.sendall((str(len(stringData))).encode().ljust(6) + stringData)
-    #s.sendall(stringData)
     
 cam.release()
 
