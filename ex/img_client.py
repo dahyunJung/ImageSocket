@@ -22,8 +22,8 @@ data = numpy.array(imgencode)
 stringData = data.tostring()
 
 # String 형태로 변환한 이미지를 socket을 통해서 전송
-sock.send( str(len(stringData)).ljust(16));
-sock.send( stringData );
+sock.send( str(len(stringData)).ljust(16))
+sock.send( stringData )
 sock.close()
 
 # 다시 이미지로 디코딩해서 화면에 출력. 그리고 종료
@@ -31,3 +31,5 @@ decimg=cv2.imdecode(data,1)
 cv2.imshow('CLIENT',decimg)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+#https://walkinpcm.blogspot.com/2016/05/python-python-opencv-tcp-socket-image.html

@@ -21,8 +21,9 @@ while True:
 
     # frame을 String 형태로 변환
     data = numpy.array(frame)
-    stringData = data.tostring()
- 
-    s.sendall((str(len(stringData))).encode().ljust(16) + stringData)
+    stringData = data.tobytes()
+    
+    # s.sendall((str(len(stringData))).encode().ljust(16) + stringData)
+    s.send(stringData)
  
 cam.release()
