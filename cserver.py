@@ -13,8 +13,8 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
  
-HOST=''     # 자신의 컴 ip
-PORT=8485
+HOST=''
+PORT=8585
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.bind((HOST,PORT))
