@@ -1,45 +1,36 @@
-# client가 server로 이미지를 보낸다.
-import cv2
 import socket
+import cv2
 import numpy as np
+ 
+#socket에서 수신한 버퍼를 반환하는 함수
+def recvall(sock, count):
+    # 바이트 문자열
+    buf = b''
+    while count:
+        newbuf = sock.recv(count)
+        if not newbuf: return None
+        buf += newbuf
+        count -= len(newbuf)
+    return buf
+ 
+HOST=''     # 자신의 컴 ip
+PORT=8485
+ 
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.bind((HOST,PORT))
+s.listen(10)
+print('Socket now listening')
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('127.0.0.1', 8485))       
-
-cam = cv2.VideoCapture('1215.mp4')
-
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
-
+#연결, conn에는 소켓 객체, addr은 소켓에 바인드 된 주소
+conn,addr=s.accept()
+ 
 while True:
-    ret, frame = cam.read()
-    result, frame = cv2.imencode('.jpg', frame, encode_param)
-    stringData = frame.tobytes()
-
-    s.sendall((str(len(stringData))).encode().ljust(6) + stringData)
+    # client에서 받은 stringData의 크기 (==(str(len(stringData))).encode().ljust(16))
+    length = recvall(conn, 16)
+    stringData = recvall(conn, int(length))
+    data = np.fromstring(stringData, dtype = 'uint8')
     
-cam.release()
-
-
-
-
-'''
-cam = cv2.VideoCapture(0)
-
-cam.set(3, 320)
-cam.set(4, 240)
- 
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
- 
-while True:
-    ret, frame = cam.read()
-    result, frame = cv2.imencode('.jpg', frame, encode_param)
-    # frame을 String 형태로 변환
-    data = np.array(frame)
-    stringData = data.tostring()
- 
-    #서버에 데이터 전송 (str(len(stringData))).encode().ljust(16)
-    s.sendall((str(len(stringData))).encode().ljust(16) + stringData)
- 
-cam.release()
-
-'''
+    #data를 디코딩한다.
+    frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
+    cv2.imshow('ImageWindow',frame)
+    cv2.waitKey(1)
