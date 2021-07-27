@@ -1,24 +1,47 @@
-import socket
+# client가 server로 이미지를 보낸다.
 import cv2
+import socket
+import numpy as np
 
-HOST = '127.0.0.1'	
-PORT = 8485
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('127.0.0.1', 8485))       
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)	
-client_socket.connect((HOST, PORT))	
+cam = cv2.VideoCapture('1215.mp4')
 
-# 메시지를 보낸다.	
-msg = 'java hello'
-# 메시지를 바이너리(byte)형식으로 변환	
-data = msg.encode()	
-# 메시지 길이를 구한다.	
-length = len(data)	
-# server로 little 엔디언 형식으로 데이터 길이를 전송한다.	
-#client_socket.sendall(length.to_bytes(4, byteorder="little"))	
-# 데이터를 전송한다.	
-client_socket.sendall(data)
- 	
-client_socket.close()
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
+
+while True:
+    ret, frame = cam.read()
+    result, frame = cv2.imencode('.jpg', frame, encode_param) 
+    data = np.array(frame)  # type=numpy.ndarray print([[255][219][213]], ...)
+    stringData = data.tobytes()     # type=bytes
+
+    #서버에 데이터 전송(str(len(stringData))).encode().ljust(16)
+    s.sendall((str(len(stringData))).encode().ljust(6) + stringData)
+    #s.sendall(stringData)
+    
+cam.release()
 
 
-# 출처: https://nowonbun.tistory.com/672 [명월 일지]
+
+'''
+cam = cv2.VideoCapture(0)
+
+cam.set(3, 320)
+cam.set(4, 240)
+ 
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+ 
+while True:
+    ret, frame = cam.read()
+    result, frame = cv2.imencode('.jpg', frame, encode_param)
+    # frame을 String 형태로 변환
+    data = np.array(frame)
+    stringData = data.tostring()
+ 
+    #서버에 데이터 전송 (str(len(stringData))).encode().ljust(16)
+    s.sendall((str(len(stringData))).encode().ljust(16) + stringData)
+ 
+cam.release()
+
+'''

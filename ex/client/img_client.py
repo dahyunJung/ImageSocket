@@ -11,7 +11,7 @@ sock = socket.socket()
 sock.connect((TCP_IP, TCP_PORT))
 
 #OpenCV를 이용해서 webcam으로 부터 이미지 추출
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture("1215.mp4")
 ret, frame = capture.read()
 
 #추출한 이미지를 String 형태로 변환(인코딩)시키는 과정
@@ -21,8 +21,8 @@ data = numpy.array(imgencode)
 stringData = data.tostring()
 
 #String 형태로 변환한 이미지를 socket을 통해서 전송
-sock.send( str(len(stringData)).ljust(16));
-sock.send( stringData );
+sock.send( str(len(stringData)).ljust(16))
+sock.send( stringData )
 sock.close()
 
 #다시 이미지로 디코딩해서 화면에 출력. 그리고 종료

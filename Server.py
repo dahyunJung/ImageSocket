@@ -1,3 +1,4 @@
+# sever가 client로 부터 이미지를 얻는다.
 import socket
 import cv2
 import numpy as np
@@ -27,6 +28,9 @@ conn, addr=s.accept()
 
 while True:
 # client에서 받은 stringData의 크기 (==(str(len(stringData))).encode().ljust(16))
+    #xc = conn.recv(len(s))
+    #a = np.fromstring()
+
     length = recvall(conn, 6)       # buf 크기
     stringData = recvall(conn, int(length))     # byte 데이터
     data = np.fromstring(stringData, dtype = 'uint8')    
