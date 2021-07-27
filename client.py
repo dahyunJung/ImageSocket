@@ -13,11 +13,12 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
 while True:
     ret, frame = cam.read()
     result, frame = cv2.imencode('.jpg', frame, encode_param)
-    stringData = frame.tobytes()     # type=bytes
+    stringData = frame.tobytes()
 
     s.sendall((str(len(stringData))).encode().ljust(6) + stringData)
     
 cam.release()
+
 
 
 
