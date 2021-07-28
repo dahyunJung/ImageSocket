@@ -13,36 +13,6 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
  
-HOST='127.0.0.1'
-PORT=8585
-
-s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.connect((HOST, PORT))
- 
-while True:
-    data = s.recv(2048)
-
-    print(data.decode('urf-8'))
-
-    #s.close()
-
-
-'''
-import socket
-import cv2
-import numpy as np
- 
-#socket에서 수신한 버퍼를 반환하는 함수
-def recvall(sock, count):
-    # 바이트 문자열
-    buf = b''
-    while count:
-        newbuf = sock.recv(count)
-        if not newbuf: return None
-        buf += newbuf
-        count -= len(newbuf)
-    return buf
- 
 HOST=''
 PORT=8585
 
@@ -59,9 +29,12 @@ while True:
     length = recvall(conn, 16)
     stringData = recvall(conn, int(length))
     data = np.fromstring(stringData, dtype = 'uint8')
+
+    print(data)
+    #print(type(data))   type(numpy.ndarray)
     
     #data를 디코딩한다.
     frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
+    #print(type(frame))     type(numpy.ndarray)
     cv2.imshow('ImageWindow',frame)
     cv2.waitKey(1)
-'''
