@@ -28,13 +28,14 @@ while True:
     # client에서 받은 stringData의 크기 (==(str(len(stringData))).encode().ljust(16))
     length = recvall(conn, 16)
     stringData = recvall(conn, int(length))
-    data = np.fromstring(stringData, dtype = 'uint8')
 
-    print(data)
-    #print(type(data))   type(numpy.ndarray)
-    
+    #f = stringData.decode('utf-8')
+    data = np.frombuffer(stringData, dtype = 'uint8')
     #data를 디코딩한다.
     frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
-    #print(type(frame))     type(numpy.ndarray)
+
     cv2.imshow('ImageWindow',frame)
     cv2.waitKey(1)
+
+
+#cv2.imwrite("image.jpg", frame)
