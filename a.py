@@ -1,4 +1,4 @@
-# client 카메라 영상 보내기
+# client
 import cv2
 import socket
 import numpy
@@ -15,8 +15,10 @@ encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 while True:
     # 제대로 읽으면 ret = True, 실패면 ret = False, frame에는 읽은 프레임
     ret, frame = cam.read()
+
     # encode_param의 형식으로 frame을 jpg로 이미지를 인코딩한다.
     result, frame = cv2.imencode('.jpg', frame, encode_param)
+
     # frame을 String 형태로 변환
     data = numpy.array(frame)
 
