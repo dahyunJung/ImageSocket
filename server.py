@@ -15,23 +15,21 @@ print('listen')
 #연결, conn에는 소켓 객체, addr은 소켓에 바인드 된 주소
 conn,addr=s.accept()
 
-cam = cv2.VideoCapture("1215.mp4")
-encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
- 
-while True:
-    # 제대로 읽으면 ret = True, 실패면 ret = False, frame에는 읽은 프레임
-    ret, frame = cam.read()
-
-    # encode_param의 형식으로 frame을 jpg로 이미지를 인코딩한다.
-    result, frame = cv2.imencode('.jpg', frame, encode_param)
-
-    # frame을 String 형태로 변환
-    data = numpy.array(frame)
-
-    #stringData = data.tostring() tobytes()를 권함
-    stringData = data.tobytes()
- 
-    conn.sendall((str(len(stringData))).encode().ljust(16) + stringData)
-
+try:
+    cam = cv2.VideoCapture("1215.mp4")
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+    
+    while True:
+        ret, frame = cam.read()    # frame에는 읽은 프레임
+        result, frame = cv2.imencode('.jpg', frame, encode_param)    # frame을 jpg로 이미지 인코딩.
+        data = numpy.array(frame)    # frame을 String 형태로 변환
+        #print(data)        #[[255] \n [216] ...]
+        stringData = data.tobytes()    # tostring() tobytes()를 권함
+        # print(stringData)     # /x12
+    
+        conn.sendall((str(len(stringData))).encode().ljust(16) + stringData)
+        #conn.sendall(stringData)
+except:
+    print('cancel')
 
 #cv2.imwrite("image.jpg", frame)

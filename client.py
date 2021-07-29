@@ -6,13 +6,15 @@ import numpy
  
 #socket에서 수신한 버퍼를 반환하는 함수
 def recvall(sock, count):
-    # 바이트 문자열
-    buf = b''
+    buf = b''    # 바이트 문자열
     while count:
         newbuf = sock.recv(count)
-        if not newbuf: return None
+        if not newbuf: 
+            return None
         buf += newbuf
         count -= len(newbuf)
+    print(type(buf))
+    
     return buf
 
 HOST = '127.0.0.1'
@@ -26,6 +28,7 @@ while True:
     length = recvall(s, 16)
     stringData = recvall(s, int(length))
     data = numpy.frombuffer(stringData, dtype = 'uint8')
+    #print(data)     #[[255 .... 217]]
     frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
 
     cv2.imshow('ImageWindow',frame)
