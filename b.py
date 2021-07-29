@@ -14,7 +14,7 @@ def recvall(sock, count):
     return buf
  
 HOST=''
-PORT=8585
+PORT=9594
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.bind((HOST,PORT))
@@ -25,13 +25,9 @@ print('Socket now listening')
 conn,addr=s.accept()
  
 while True:
-    # client에서 받은 stringData의 크기 (==(str(len(stringData))).encode().ljust(16))
     length = recvall(conn, 16)
     stringData = recvall(conn, int(length))
-
-    #f = stringData.decode('utf-8')
     data = np.frombuffer(stringData, dtype = 'uint8')
-    #data를 디코딩한다.
     frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
 
     cv2.imshow('ImageWindow',frame)

@@ -2,11 +2,11 @@ import cv2
 import socket
 import numpy as np
  
-## TCP 사용
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-## server ip, port (jetson nano))
-s.connect(('192.168.219.115', 8485))       
+HOST = '127.0.0.1'
+PORT = 9594
 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
 
 ## webcam 이미지 capture
 cam = cv2.VideoCapture(0)

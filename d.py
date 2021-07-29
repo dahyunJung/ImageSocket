@@ -13,11 +13,17 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
  
-HOST=''
-PORT=8585
-
+HOST=''     # 자신의 컴 ip
+PORT=8485
+ 
+#TCP 사용
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+print('Socket created')
+ 
+#서버의 아이피와 포트번호 지정
 s.bind((HOST,PORT))
+print('Socket bind complete')
+# 클라이언트의 접속을 기다린다. (클라이언트 연결을 10개까지 받는다)
 s.listen(10)
 print('Socket now listening')
  
@@ -28,14 +34,9 @@ while True:
     # client에서 받은 stringData의 크기 (==(str(len(stringData))).encode().ljust(16))
     length = recvall(conn, 16)
     stringData = recvall(conn, int(length))
-
-    #f = stringData.decode('utf-8')
-    data = np.frombuffer(stringData, dtype = 'uint8')
+    data = np.fromstring(stringData, dtype = 'uint8')
+    
     #data를 디코딩한다.
     frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
-
     cv2.imshow('ImageWindow',frame)
     cv2.waitKey(1)
-
-
-#cv2.imwrite("image.jpg", frame)
